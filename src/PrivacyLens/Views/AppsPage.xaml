@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PrivacyLens.ViewModels"
+             xmlns:converters="clr-namespace:PrivacyLens.Converters"
+             xmlns:controls="clr-namespace:PrivacyLens.Controls"
+             xmlns:models="clr-namespace:PrivacyLens.Models"
+             x:Class="PrivacyLens.Views.AppsPage"
+             Title="Apps"
+             x:Name="AppsRoot"
+             Shell.NavBarIsVisible="False"
+             x:DataType="vm:AppsViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:PermissionIconConverter x:Key="PermissionIconConverter" />
+            <converters:StringNotNullOrEmptyConverter x:Key="StringNotNullOrEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid x:Name="ContentGrid" Opacity="0" RowDefinitions="Auto, Auto, Auto, *" Padding="16,12,16,16" RowSpacing="12">
+            <!-- Page Header -->
+            <!--<Label Grid.Row="0"
+               Text="Apps"
+               Style="{StaticResource PageTitleStyle}"
+               Margin="0,25,0,25" />-->
+
+            <VerticalStackLayout Grid.Row="0" HorizontalOptions="Start" Spacing="4" Margin="0,30,0,30">
+                <Label Text="Apps" Style="{StaticResource PageTitleStyle}" FontSize="28" FontAttributes="Bold"  />
+                <BoxView HeightRequest="3" WidthRequest="40" Color="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" HorizontalOptions="Start" />
+            </VerticalStackLayout>
+
+
+            <!-- Search pill: gray fill, no border -->
+            <Border Grid.Row="1" Style="{StaticResource InputBorderStyle}" Margin="0,0,0,4" >
+                <Grid ColumnDefinitions="Auto, *, Auto" >
+                    <Image Grid.Column="0"
+                       Source="ic_search.png"
+                       WidthRequest="20" HeightRequest="20"
+                       VerticalOptions="Center"
+                       Margin="14,0,0,0"
+                       Opacity="0.45" />
+                    <Entry Grid.Column="1"
+                       Placeholder="Search apps..."
+                       Text="{Binding SearchText}"
+                       BackgroundColor="Transparent"
+                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                       PlaceholderColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"
+                       FontSize="15"
+                       MinimumHeightRequest="52"
+                       Margin="8,0,0,0"
+                       ClearButtonVisibility="Never" />
+                    <Image Grid.Column="2"
+                       Source="ic_close.png"
+                       WidthRequest="14" HeightRequest="14"
+                       VerticalOptions="Center"
+                       Margin="0,0,14,0"
+                       Opacity="0.45"
+                       IsVisible="{Binding SearchText, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ClearSearchCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Grid>
+            </Border>
+
+            <!-- Filter row -->
+            <Grid Grid.Row="2" ColumnDefinitions="150, *, Auto" ColumnSpacing="10" Margin="0,0,0,4">
+                <!-- Filter chip -->
+                <Border Grid.Column="0"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    BackgroundColor="Transparent"
+                    Padding="10,0"
+                    HeightRequest="40">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenFilterPopupCommand}" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="8" VerticalOptions="Center">
+                        <Image Grid.Column="0"
+                           Source="ic_filter_list.png"
+                           WidthRequest="16" HeightRequest="16"
+                           VerticalOptions="Center"
+                           Opacity="1" />
+                        <!-- Selected Filter Text -->
+                        <Label Grid.Column="1"
+                           Text="{Binding SelectedFilter}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                        <Image Grid.Column="2"
+                           Source="ic_chevron_right.png"
+                           WidthRequest="14" HeightRequest="14"
+                           Rotation="90"
+                           VerticalOptions="Center"
+                           Opacity="1" />
+                    </Grid>
+                </Border>
+
+                <!-- Spacer -->
+                <!--<BoxView Grid.Column="1" />-->
+
+                <!-- Count label -->
+                <Label Grid.Column="2"
+                   Text="{Binding Apps.Count, StringFormat='{0} apps'}"
+                   VerticalOptions="Center"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}" />
+            </Grid>
+
+            <!-- App list -->
+            <CollectionView Grid.Row="3"
+                            ItemsSource="{Binding Apps}"
+                            SelectionMode="None"
+                            VerticalScrollBarVisibility="Never"
+                            HorizontalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,3" x:DataType="models:InstalledApp">
+                            <Border StrokeThickness="0" BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}" StrokeShape="RoundRectangle 12" Padding="16,14"> 
+                                <!--<Border.Shadow>
+                                    <Shadow Brush="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Black}}"
+                                            Offset="0,2"
+                                            Radius="8"
+                                            Opacity="{AppThemeBinding Light=0.05, Dark=0.2}" />
+                                </Border.Shadow>-->
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference AppsRoot}, Path=BindingContext.NavigateToDetailsCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto, *, Auto"
+                                      ColumnSpacing="16">
+
+                                        <!-- App icon container -->
+                                        <Border Grid.Column="0"
+                                            WidthRequest="34" HeightRequest="34"
+                                            VerticalOptions="Start"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 10">
+                                            <Grid>
+                                                <!-- Fallback icon -->
+                                                <Image Source="ic_phone_android.png"
+                                                   WidthRequest="32" HeightRequest="32"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   Opacity="0.35" />
+                                                <!-- Actual cached app icon overlaid -->
+                                                <Image Source="{Binding IconCachePath}"
+                                                   Aspect="AspectFill" />
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Content -->
+                                        <VerticalStackLayout Grid.Column="1"
+                                                         VerticalOptions="Start"
+                                                         Spacing="6">
+
+                                            <!-- App name -->
+                                            <Label Text="{Binding Name}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+                                            <!-- App provided description (only shown if available) -->
+                                            <Label Text="{Binding AppProvidedDescription}"
+                                               FontSize="13"
+                                               LineHeight="1.4"
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
+                                               IsVisible="{Binding AppProvidedDescription, Converter={StaticResource StringNotNullOrEmptyConverter}}" />
+
+                                            <!-- Standard app type description -->
+                                            <Label Text="{Binding Description}"
+                                               FontSize="13"
+                                               LineHeight="1.4"
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+
+                                            <!-- Permission count badge -->
+                                            <Border StrokeThickness="0"
+                                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}"
+                                                StrokeShape="RoundRectangle 16"
+                                                Padding="12,4"
+                                                HorizontalOptions="Start"
+                                                Margin="0,4,0,0">
+                                                <Label Text="{Binding GrantedSensitivePermissionCount, StringFormat='{0} permissions'}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
+                                            </Border>
+                                        </VerticalStackLayout>
+
+                                        <!-- Trailing chevron -->
+                                        <Image Grid.Column="2"
+                                           Source="ic_chevron_right.png"
+                                           WidthRequest="18" HeightRequest="18"
+                                           VerticalOptions="Start"
+                                           Margin="0,4,0,0"
+                                           Opacity="0.8" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <!-- Empty state -->
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Padding="32" Spacing="12"
+                                         HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image Source="ic_search.png"
+                               WidthRequest="40" HeightRequest="40"
+                               HorizontalOptions="Center"
+                               Opacity="0.25" />
+                            <Label Text="No apps found"
+                               Style="{StaticResource EmptyStateTitleStyle}" />
+                            <Label Text="Adjust your search or filter."
+                               Style="{StaticResource EmptyStateDescriptionStyle}" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+        </Grid>
+
+        <!-- Custom Filter Bottom Sheet Popup -->
+        <Grid x:Name="BottomSheetGrid"
+              IsVisible="False"
+              InputTransparent="True"
+              ZIndex="100">
+            <BoxView x:Name="BottomSheetBackdrop" BackgroundColor="#99000000" Opacity="0">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseFilterPopupCommand}" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            
+            <Border x:Name="BottomSheetContent"
+                    VerticalOptions="End"
+                    TranslationY="1000"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 24,24,0,0"
+                    Padding="24,20,24,0">
+                <!-- Prevent taps inside the popup from closing it, but allow swipe down to close -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer />
+                    <SwipeGestureRecognizer Direction="Down" Command="{Binding CloseFilterPopupCommand}" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="20">
+                    <!-- Handle Indicator -->
+                    <BoxView WidthRequest="40" HeightRequest="4" 
+                             CornerRadius="2"
+                             BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray700}}"
+                             HorizontalOptions="Center" />
+                             
+                    <Label Text="Filter Apps"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                           
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="All"
+                                Command="{Binding SelectFilterCommand}"
+                                CommandParameter="All"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray850}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                CornerRadius="12"
+                                HeightRequest="56"
+                                FontAttributes="Bold" />
+                        <Button Text="User Apps"
+                                Command="{Binding SelectFilterCommand}"
+                                CommandParameter="User Apps"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray850}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                CornerRadius="12"
+                                HeightRequest="56"
+                                FontAttributes="Bold" />
+                        <Button Text="System Apps"
+                                Command="{Binding SelectFilterCommand}"
+                                CommandParameter="System Apps"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray850}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                CornerRadius="12"
+                                HeightRequest="56"
+                                FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- Full-Screen Lottie Loading & Interaction Blocking Overlay -->
+        <controls:LoadingOverlayView Grid.RowSpan="4" IsLoading="{Binding IsBusy}" LoadingMessage="Scanning installed apps..." />
+
+    </Grid>
+</ContentPage>

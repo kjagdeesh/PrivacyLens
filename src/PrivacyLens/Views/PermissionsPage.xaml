@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PrivacyLens.ViewModels"
+             xmlns:converters="clr-namespace:PrivacyLens.Converters"
+             xmlns:controls="clr-namespace:PrivacyLens.Controls"
+             xmlns:models="clr-namespace:PrivacyLens.Models"
+             x:Class="PrivacyLens.Views.PermissionsPage"
+             Title="Permissions"
+             x:Name="PermissionsRoot"
+             Shell.NavBarIsVisible="False"
+             x:DataType="vm:PermissionsViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:PermissionIconConverter x:Key="PermissionIconConverter" />
+            <converters:StringNotNullOrEmptyConverter x:Key="StringNotNullOrEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid x:Name="ContentGrid" Opacity="0" RowDefinitions="Auto, Auto, *" Padding="16,12,16,16" RowSpacing="12" VerticalOptions="Fill" HorizontalOptions="Fill">
+
+            <!-- Page Header -->
+            <!--<Label Grid.Row="0"
+                   Text="Permissions"
+                   Style="{StaticResource PageTitleStyle}"
+                   Margin="0,25,0,25" />-->
+
+            <VerticalStackLayout Grid.Row="0" HorizontalOptions="Start" Spacing="4" Margin="0,30,0,30">
+                <Label Text="Permissions" Style="{StaticResource PageTitleStyle}" FontSize="28" FontAttributes="Bold"  />
+                <BoxView HeightRequest="3" WidthRequest="40" Color="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" HorizontalOptions="Start" />
+            </VerticalStackLayout>
+
+            <!-- Search pill: gray fill, no border -->
+            <Border Grid.Row="1" Style="{StaticResource InputBorderStyle}" Margin="0,0,0,4">
+                <Grid ColumnDefinitions="Auto, *, Auto">
+                    
+                    <Image Grid.Column="0"
+                           Source="ic_search.png"
+                           WidthRequest="20" HeightRequest="20"
+                           VerticalOptions="Center"
+                           Margin="14,0,0,0"
+                           Opacity="0.45" />
+                    
+                    <Entry Grid.Column="1"
+                           Placeholder="Search permissions..."
+                           Text="{Binding SearchText}"
+                           BackgroundColor="Transparent"
+                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                           PlaceholderColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"
+                           FontSize="15"
+                           MinimumHeightRequest="52"
+                           Margin="8,0,0,0"
+                           ClearButtonVisibility="Never" />
+                    
+                    <Image Grid.Column="2"
+                           Source="ic_close.png"
+                           WidthRequest="14" HeightRequest="14"
+                           VerticalOptions="Center"
+                           Margin="0,0,14,0"
+                           Opacity="0.45"
+                           IsVisible="{Binding SearchText, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ClearSearchCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Grid>
+            </Border>
+
+            <!-- Permission list -->
+            <CollectionView Grid.Row="2"
+                ItemsSource="{Binding Permissions}"
+                SelectionMode="None"
+                VerticalOptions="FillAndExpand"
+                VerticalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,4" x:DataType="models:DevicePermission">
+                            <Frame Style="{StaticResource CardStyle}" BorderColor="Transparent">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference PermissionsRoot}, Path=BindingContext.NavigateToDetailsCommand}" CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
+
+                                    <!-- Tonal icon container with permission icon image -->
+                                    <Border Grid.Column="0"
+                                            WidthRequest="48"
+                                            HeightRequest="48"
+                                            StrokeThickness="0"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray850}}"
+                                            StrokeShape="RoundRectangle 12"
+                                            VerticalOptions="Start">
+                                        <Image Source="{Binding Category, Converter={StaticResource PermissionIconConverter}}"
+                                                Style="{StaticResource PermissionIconImageStyle}" />
+                                    </Border>
+
+                                    <!-- Content -->
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         VerticalOptions="Start"
+                                                         Spacing="6">
+
+                                        <!-- Title -->
+                                        <Label Text="{Binding DisplayName}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+                                        <!-- Description -->
+                                        <Label Text="{Binding Description}"
+                                               FontSize="13"
+                                               LineHeight="1.4"
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+
+                                        <!-- Apps Count Badge -->
+                                        <Border StrokeThickness="0"
+                                                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}"
+                                                    StrokeShape="RoundRectangle 16"
+                                                    Padding="12,4"
+                                                    HorizontalOptions="Start"
+                                                    Margin="0,4,0,0">
+                                            <Label Text="{Binding GrantedAppCount, StringFormat='{0} apps'}"
+                                                       FontSize="12"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
+                                        </Border>
+                                    </VerticalStackLayout>
+
+                                    <!-- Trailing chevron -->
+                                    <Image Grid.Column="2"
+                                           Source="ic_chevron_right.png"
+                                           WidthRequest="18" HeightRequest="18"
+                                           VerticalOptions="Start"
+                                           Margin="0,4,0,0"
+                                           Opacity=".8" />
+
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="32" Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Image Source="ic_search.png"
+                               WidthRequest="40" HeightRequest="40"
+                               HorizontalOptions="Center"
+                               Opacity="0.25" />
+                        <Label Text="No permissions found" Style="{StaticResource EmptyStateTitleStyle}" />
+                        <Label Text="Adjust your search or refresh." Style="{StaticResource EmptyStateDescriptionStyle}" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+        </Grid>
+
+        <!-- Full-Screen Lottie Loading & Interaction Blocking Overlay -->
+        <controls:LoadingOverlayView Grid.RowSpan="3" IsLoading="{Binding IsBusy}" LoadingMessage="Analyzing permission groups..." />
+    </Grid>
+
+</ContentPage>

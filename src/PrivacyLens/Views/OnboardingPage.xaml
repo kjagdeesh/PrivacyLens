@@ -1,0 +1,85 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:PrivacyLens.ViewModels"
+             xmlns:converters="clr-namespace:PrivacyLens.Converters"
+             x:Class="PrivacyLens.Views.OnboardingPage"
+             x:DataType="viewmodels:OnboardingViewModel"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark=#00000}"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:OnboardingButtonTextConverter x:Key="OnboardingButtonTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+        
+        <!-- Skip Button -->
+        <Button Grid.Row="0" 
+                Text="Skip" 
+                Command="{Binding SkipCommand}"
+                HorizontalOptions="End" 
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                FontAttributes="Bold"
+                Margin="16,16,16,0" />
+
+        <!-- Carousel -->
+        <CarouselView Grid.Row="1"
+                      ItemsSource="{Binding Slides}"
+                      Position="{Binding Position}"
+                      IndicatorView="IndicatorView"
+                      IsBounceEnabled="False"
+                      IsSwipeEnabled="True"
+                      HorizontalScrollBarVisibility="Never"
+                      VerticalScrollBarVisibility="Never"
+                      Loop="False">
+            <CarouselView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:OnboardingSlide">
+                    <Grid RowDefinitions="3*,2*" Padding="24">
+                        
+                        <!-- Illustration -->
+                        <Image Grid.Row="0" 
+                               Source="{Binding ImageSource}" 
+                               Aspect="AspectFit" 
+                               Margin="0,0,0,24" />
+
+                        <!-- Text Content -->
+                        <VerticalStackLayout Grid.Row="1" Spacing="16" VerticalOptions="Start" HorizontalOptions="Center">
+                            <Label Text="{Binding Title}" 
+                                   Style="{StaticResource PageTitleStyle}"
+                                   HorizontalOptions="Center" 
+                                   HorizontalTextAlignment="Center" />
+                                   
+                            <Label Text="{Binding Description}" 
+                                   Style="{StaticResource PageSubtitleStyle}"
+                                   HorizontalOptions="Center" 
+                                   HorizontalTextAlignment="Center"
+                                   LineHeight="1.3" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+
+        <!-- Indicators -->
+        <IndicatorView x:Name="IndicatorView"
+                       Grid.Row="2"
+                       IndicatorColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}"
+                       SelectedIndicatorColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                       IndicatorSize="8"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,24" />
+
+        <!-- Next / Get Started Button -->
+        <Button Grid.Row="3"
+                Text="{Binding Position, Converter={StaticResource OnboardingButtonTextConverter}}"
+                Command="{Binding NextCommand}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Padding="20"
+                FontAttributes="Bold"
+                Margin="40,0,40,32" />
+
+    </Grid>
+</ContentPage>

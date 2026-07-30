@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         Blue Rebranding Theme
+         Primary: #112772 (replaces Black)
+         Secondary: #1e80c9 (replaces Grays)
+         ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Base -->
+    <Color x:Key="Black">#112772</Color>
+    <Color x:Key="White">#FFFFFF</Color>
+
+    <!-- Gray scale (light → dark) - Replaced with Alpha variants of #112772 (Primary) -->
+    <Color x:Key="Gray50">#0D112772</Color> <!-- 5% Alpha -->
+    <Color x:Key="Gray100">#1A112772</Color> <!-- 10% Alpha -->
+    <Color x:Key="Gray200">#33112772</Color> <!-- 20% Alpha -->
+    <Color x:Key="Gray300">#4D112772</Color> <!-- 30% Alpha -->
+    <Color x:Key="Gray400">#66112772</Color> <!-- 40% Alpha -->
+    
+    <!-- User requested Gray replacement: #1e80c9 (Used for typical middle grays) -->
+    <Color x:Key="Gray500">#1e80c9</Color>
+    <Color x:Key="Gray600">#1e80c9</Color>
+    <Color x:Key="Gray700">#1e80c9</Color>
+    
+    <Color x:Key="Gray800">#B3112772</Color> <!-- 70% Alpha -->
+    <Color x:Key="Gray850">#CC112772</Color> <!-- 80% Alpha -->
+    <Color x:Key="Gray900">#E6112772</Color> <!-- 90% Alpha -->
+    <Color x:Key="Gray950">#F2112772</Color> <!-- 95% Alpha -->
+
+    <!-- ── Light Mode Semantic Tokens ─────────────────────────────── -->
+    <!-- Page / surface backgrounds -->
+    <Color x:Key="SurfaceLight">#FFFFFF</Color>
+    <Color x:Key="SurfaceContainerLight">#FFFFFF</Color>
+    <Color x:Key="SurfaceVariantLight">#0D112772</Color>
+
+    <!-- Card -->
+    <Color x:Key="CardLight">#FFFFFF</Color>
+
+    <!-- Borders / outlines -->
+    <Color x:Key="OutlineLight">#1A112772</Color>
+    <Color x:Key="OutlineVariantLight">#0D112772</Color>
+    <Color x:Key="BorderLight">#1A112772</Color>
+
+    <!-- Text -->
+    <Color x:Key="OnSurfaceLight">#112772</Color>
+    <Color x:Key="OnSurfaceVariantLight">#1e80c9</Color>
+    <Color x:Key="TextPrimary">#112772</Color>
+    <Color x:Key="TextSecondary">#1e80c9</Color>
+    <Color x:Key="TextMuted">#4D112772</Color>
+
+    <!-- Primary role -->
+    <Color x:Key="Primary">#112772</Color>
+    <Color x:Key="OnPrimary">#FFFFFF</Color>
+    <Color x:Key="PrimaryContainer">#1A112772</Color>
+    <Color x:Key="OnPrimaryContainer">#112772</Color>
+
+    <!-- Warn -->
+    <Color x:Key="WarnContainer">#1A112772</Color>
+    <Color x:Key="OnWarnContainer">#112772</Color>
+    <Color x:Key="WarnDark">#1e80c9</Color>
+
+    <!-- Error -->
+    <Color x:Key="ErrorContainer">#33112772</Color>
+    <Color x:Key="OnErrorContainer">#112772</Color>
+    <Color x:Key="ErrorContainerDark">#CC112772</Color>
+    <Color x:Key="OnErrorContainerDark">#0D112772</Color>
+
+    <!-- ── Dark Mode Semantic Tokens ──────────────────────────────── -->
+    <!-- In dark mode, we use darker alpha variants or pure #112772 where appropriate -->
+    <Color x:Key="SurfaceDark">#112772</Color>
+    <Color x:Key="SurfaceContainerDark">#F2112772</Color>
+    <Color x:Key="SurfaceVariantDark">#E6112772</Color>
+    <Color x:Key="CardDark">#F2112772</Color>
+
+    <Color x:Key="OutlineDark">#B3112772</Color>
+    <Color x:Key="OutlineVariantDark">#E6112772</Color>
+    <Color x:Key="BorderDark">#B3112772</Color>
+
+    <Color x:Key="OnSurfaceDark">#FFFFFF</Color>
+    <Color x:Key="OnSurfaceVariantDark">#1e80c9</Color>
+    <Color x:Key="TextPrimaryDark">#FFFFFF</Color>
+    <Color x:Key="TextSecondaryDark">#1e80c9</Color>
+    <Color x:Key="TextMutedDark">#4DFFFFFF</Color> <!-- White with alpha for muted text on dark background -->
+
+    <!-- Primary role -->
+    <Color x:Key="PrimaryDark">#FFFFFF</Color>
+    <Color x:Key="OnPrimaryDark">#112772</Color>
+    <Color x:Key="PrimaryContainerDark">#E6112772</Color>
+    <Color x:Key="OnPrimaryContainerDark">#FFFFFF</Color>
+    <Color x:Key="PrimaryLight">#FFFFFF</Color>
+    <Color x:Key="PrimaryLightDark">#E6112772</Color>
+
+    <!-- Warn dark -->
+    <Color x:Key="WarnContainerDark">#E6112772</Color>
+
+    <!-- Legacy aliases to keep existing code compiling -->
+    <Color x:Key="OffBlack">#112772</Color>
+    <Color x:Key="MidnightBlue">#112772</Color>
+    <Color x:Key="Secondary">#FFFFFF</Color>
+    <Color x:Key="SecondaryDarkText">#1e80c9</Color>
+    <Color x:Key="Tertiary">#1e80c9</Color>
+    <Color x:Key="Magenta">#112772</Color>
+    <Color x:Key="Danger">#E6112772</Color>
+    <Color x:Key="DangerDark">#1e80c9</Color>
+    <Color x:Key="DangerSurface">#33112772</Color>
+    <Color x:Key="DangerSurfaceDark">#CC112772</Color>
+    <Color x:Key="Warn">#B3112772</Color>
+    <Color x:Key="WarnDark2">#1e80c9</Color>
+    <Color x:Key="WarnSurface">#1A112772</Color>
+    <Color x:Key="WarnSurfaceDark">#E6112772</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush"   Color="{StaticResource Primary}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
+    <SolidColorBrush x:Key="WhiteBrush"     Color="{StaticResource White}"/>
+    <SolidColorBrush x:Key="BlackBrush"     Color="{StaticResource Black}"/>
+    <SolidColorBrush x:Key="Gray100Brush"   Color="{StaticResource Gray100}"/>
+    <SolidColorBrush x:Key="Gray200Brush"   Color="{StaticResource Gray200}"/>
+    <SolidColorBrush x:Key="Gray300Brush"   Color="{StaticResource Gray300}"/>
+    <SolidColorBrush x:Key="Gray400Brush"   Color="{StaticResource Gray400}"/>
+    <SolidColorBrush x:Key="Gray500Brush"   Color="{StaticResource Gray500}"/>
+    <SolidColorBrush x:Key="Gray600Brush"   Color="{StaticResource Gray600}"/>
+    <SolidColorBrush x:Key="Gray900Brush"   Color="{StaticResource Gray900}"/>
+    <SolidColorBrush x:Key="Gray950Brush"   Color="{StaticResource Gray950}"/>
+
+</ResourceDictionary>

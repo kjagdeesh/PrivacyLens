@@ -1,0 +1,35 @@
+namespace PrivacyLens.Enums
+{
+    public enum PermissionCategory
+    {
+        Unknown,
+        Camera,
+        Microphone,
+        Location,
+        Contacts,
+        PhotosAndVideos,
+        MusicAndAudio,
+        Storage,
+        Phone,
+        Sms,
+        Calendar,
+        NearbyDevices,
+        Notifications,
+        PhysicalActivity,
+        PhoneState,
+        CallRecords,
+        DisplayOverOtherApps,
+        DiscoverContacts,
+        WriteCalendar,
+        DeviceAdmin,
+        ScreenCapture,
+        Accessibility,
+        NotificationAccess,
+        UsageDataAccess,
+        InstallUnknownApps,
+        ManageAllFiles,
+        VpnControl,
+        QueryAllPackages,
+        ModifySystemSettings
+    }
+}

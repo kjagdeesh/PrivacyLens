@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PrivacyLens.ViewModels"
+             xmlns:converters="clr-namespace:PrivacyLens.Converters"
+             xmlns:models="clr-namespace:PrivacyLens.Models"
+             x:Class="PrivacyLens.Views.AppDetailsPage"
+             Title="App Details"
+             Shell.NavBarIsVisible="False"
+             x:DataType="vm:AppDetailsViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeToRelativeTimeConverter x:Key="DateTimeToRelativeTimeConverter" />
+            <converters:PermissionIconConverter x:Key="PermissionIconConverter" />
+            <converters:PermissionStatusConverter x:Key="PermissionStatusConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid x:Name="ContentGrid" Opacity="0" RowDefinitions="Auto, Auto, Auto, *" Padding="16,12,16,0">
+
+        <!-- Back button and Page Title -->
+        <VerticalStackLayout Grid.Row="0" Spacing="24" Margin="0,10,0,24">
+            <Image Source="ic_arrow_back.png" WidthRequest="24" HeightRequest="24" HorizontalOptions="Start">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackButtonClicked" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Grid ColumnDefinitions="*, Auto" Margin="0" Padding="0">
+                <Label Grid.Column="0" Text="App Details" Style="{StaticResource PageTitleStyle}" FontSize="28" FontAttributes="Bold" />
+                <!-- Manage Settings Icon -->
+                <Image Grid.Column="1" 
+                       Source="ic_settings.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24" 
+                       VerticalOptions="Start" 
+                       HorizontalOptions="End">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ManagePermissionsCommand}" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- App header (Fixed) -->
+        <Grid Grid.Row="1" ColumnDefinitions="Auto, *" ColumnSpacing="20" Padding="4" Margin="0,0,0,32">
+            <!-- App icon container (white card) -->
+            <Border Grid.Column="0"
+                    WidthRequest="54" HeightRequest="54"
+                    Stroke="{AppThemeBinding Light={StaticResource OutlineVariantLight}, Dark={StaticResource OutlineVariantDark}}"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 16"
+                    VerticalOptions="Center">
+                <Border.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                            Opacity="0.04"
+                            Offset="0,2"
+                            Radius="6" />
+                </Border.Shadow>
+                <!-- Fallback icon -->
+                <Grid>
+                    <Image Source="ic_phone_android.png"
+                           WidthRequest="32" HeightRequest="32"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Opacity="0.35" />
+
+                    <!-- Actual cached app icon overlaid -->
+                    <Image Source="{Binding App.IconCachePath}"
+                            Aspect="AspectFit"
+                            WidthRequest="48"
+                            HeightRequest="48"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                <Label Text="{Binding App.Name}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}" />
+                <Label Text="{Binding App.PackageName}"
+                       FontSize="13"
+                       LineBreakMode="TailTruncation"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                <Label Text="{Binding App.VersionName, StringFormat='VERSION {0}'}"
+                       FontSize="11"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" />
+            </VerticalStackLayout>
+            
+        </Grid>
+
+        <!-- Permissions section header (Fixed) -->
+        <VerticalStackLayout Grid.Row="2" Spacing="4" Margin="0,0,0,16">
+            <Label Text="Permissions" FontSize="16" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}" />
+            <Label Text="Sensitive permissions granted or denied by this app."
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" />
+        </VerticalStackLayout>
+
+        <!-- Permission list (Scrollable) -->
+        <CollectionView Grid.Row="3" ItemsSource="{Binding Permissions}" SelectionMode="None" VerticalScrollBarVisibility="Never">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="0,6" x:DataType="models:AppPermission">
+                        <Border Stroke="{AppThemeBinding Light={StaticResource OutlineVariantLight}, Dark={StaticResource OutlineVariantDark}}"
+                                StrokeThickness="0"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="16,14">
+                            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
+
+                                <!-- Tonal icon container with permission image -->
+                                <Border Grid.Column="0"
+                                        WidthRequest="44"
+                                        HeightRequest="44"
+                                        StrokeThickness="0"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray850}}"
+                                        StrokeShape="RoundRectangle 12"
+                                        VerticalOptions="Center">
+                                    <Image Source="{Binding Category, Converter={StaticResource PermissionIconConverter}}"
+                                           WidthRequest="24"
+                                           HeightRequest="24"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Opacity="1" />
+                                </Border>
+
+                                <!-- Name + status -->
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                                    <Label Text="{Binding DisplayName}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}" />
+
+                                    <Border StrokeThickness="0"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="12,4"
+                                            HorizontalOptions="Start"
+                                            Margin="0,4,0,0">
+                                        <Label Text="{Binding Status}"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Allowed">
+                                                <Setter Property="BackgroundColor" Value="#03C03C" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Denied">
+                                                <Setter Property="BackgroundColor" Value="#FF1744" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Precise">
+                                                <Setter Property="BackgroundColor" Value="#03C03C" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Approximate">
+                                                <Setter Property="BackgroundColor" Value="#EDB302" />
+                                            </DataTrigger>
+                                        </Border.Triggers>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <!-- Last access -->
+                                <Label Grid.Column="2"
+                                       Text="{Binding LastAccessTime, Converter={StaticResource DateTimeToRelativeTimeConverter}}"
+                                       TextTransform="Uppercase"
+                                       FontSize="10"
+                                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Spacing="8" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Image Source="ic_verified_user.png"
+                           WidthRequest="40" HeightRequest="40"
+                           HorizontalOptions="Center"
+                           Opacity="0.3"/>
+                    <Label Text="No sensitive permissions"
+                           FontSize="14"
+                           Opacity="0.4"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        </Grid>
+    </Grid>
+</ContentPage>

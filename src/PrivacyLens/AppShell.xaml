@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="PrivacyLens.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:PrivacyLens.Views"
+    Title="PrivacyLens"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="True">
+
+    <TabBar x:Name="MainTabBar">
+        <Tab x:Name="HomeTab" Title="Home" Route="home" Icon="nav_home_active.png">
+            <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
+        </Tab>
+        <Tab x:Name="AppsTab" Title="Apps" Route="apps" Icon="nav_apps.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AppsPage}" />
+        </Tab>
+        <Tab x:Name="PermissionsTab" Title="Permissions" Route="permissions" Icon="nav_permissions.png">
+            <ShellContent ContentTemplate="{DataTemplate views:PermissionsPage}" />
+        </Tab>
+        <Tab x:Name="AboutTab" Title="About" Route="about" Icon="nav_about.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AboutPage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>
