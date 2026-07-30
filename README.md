@@ -15,6 +15,8 @@ It is designed to inspect application and permission metadata made
 available by Android---not the personal content protected by those
 permissions.
 
+![](Screenshots/Poster.png?raw=true)
+
 ------------------------------------------------------------------------
 
 ## ✨ Key Features
